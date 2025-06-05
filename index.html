@@ -103,42 +103,52 @@
                     <div class="p-3 bg-gray-700 rounded-lg">
                         <span class="font-medium text-gray-400 block mb-1">Quantidade Vendida:</span>
                         <span id="outputQuantidade" class="text-lg font-semibold text-sky-400"></span>
+                        <span class="block text-xs text-gray-400 mt-1">Fórmula: depende do driver selecionado</span>
                     </div>
                     <div class="p-3 bg-gray-700 rounded-lg">
                         <span class="font-medium text-gray-400 block mb-1">Receita Total:</span>
                         <span id="outputReceitaTotal" class="text-lg font-semibold text-green-400"></span>
+                        <span class="block text-xs text-gray-400 mt-1">Fórmula: Preço Médio (P) × Quantidade (Q)</span>
                     </div>
                     <div class="p-3 bg-gray-700 rounded-lg">
                         <span class="font-medium text-gray-400 block mb-1">Lucro / Prejuízo:</span>
                         <span id="outputLucro" class="text-lg font-semibold"></span> <!-- Cor dinâmica no JS -->
+                        <span class="block text-xs text-gray-400 mt-1">Fórmula: (MCU × Q) − Custo Fixo Total</span>
                     </div>
                      <div class="p-3 bg-gray-700 rounded-lg">
                         <span class="font-medium text-gray-400 block mb-1">Margem de Contribuição Unit. (MCU):</span>
                         <span id="outputMCU" class="text-lg font-semibold text-yellow-400"></span>
+                        <span class="block text-xs text-gray-400 mt-1">Fórmula: P × (Margem % / 100)</span>
                     </div>
                     <div class="p-3 bg-gray-700 rounded-lg">
                         <span class="font-medium text-gray-400 block mb-1">Custo Variável Unitário (CVU):</span>
                         <span id="outputCVU" class="text-lg font-semibold text-orange-400"></span>
+                        <span class="block text-xs text-gray-400 mt-1">Fórmula: P − MCU</span>
                     </div>
                     <div class="p-3 bg-gray-700 rounded-lg">
                         <span class="font-medium text-gray-400 block mb-1">Margem de Contribuição Total (MCT):</span>
                         <span id="outputMCT" class="text-lg font-semibold text-yellow-400"></span>
+                        <span class="block text-xs text-gray-400 mt-1">Fórmula: MCU × Q</span>
                     </div>
                     <div class="p-3 bg-gray-700 rounded-lg">
                         <span class="font-medium text-gray-400 block mb-1">Custo Variável Total (CVT):</span>
                         <span id="outputCVT" class="text-lg font-semibold text-orange-400"></span>
+                        <span class="block text-xs text-gray-400 mt-1">Fórmula: CVU × Q</span>
                     </div>
                     <div class="p-3 bg-gray-700 rounded-lg">
                         <span class="font-medium text-gray-400 block mb-1">Ponto de Equilíbrio (Quantidade):</span>
                         <span id="outputPEQtd" class="text-lg font-semibold text-indigo-400"></span>
+                        <span class="block text-xs text-gray-400 mt-1">Fórmula: Custo Fixo Total ÷ MCU</span>
                     </div>
                     <div class="p-3 bg-gray-700 rounded-lg">
                         <span class="font-medium text-gray-400 block mb-1">Ponto de Equilíbrio (Receita):</span>
                         <span id="outputPEReceita" class="text-lg font-semibold text-indigo-400"></span>
+                        <span class="block text-xs text-gray-400 mt-1">Fórmula: Preço Médio × PE (Qtd)</span>
                     </div>
                     <div id="outputDiffMetaContainer" class="p-3 bg-gray-700 rounded-lg sm:col-span-2" style="display: none;">
                         <span class="font-medium text-gray-400 block mb-1">Diferença para Meta de Faturamento:</span>
                         <span id="outputDiffMeta" class="text-lg font-semibold"></span> <!-- Cor dinâmica no JS -->
+                        <span class="block text-xs text-gray-400 mt-1">Fórmula: Meta − Receita Total</span>
                     </div>
                 </div>
             </section>
