@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador Financeiro Interativo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Estilo para fonte Inter */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Estilo para inputs numéricos não mostrarem setas (opcional) */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+        /* Estilo para placeholders */
+        ::placeholder {
+            color: #9ca3af; /* Cor cinza claro para placeholder */
+        }
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #2d3748; /* dark-gray-800 */
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4a5568; /* dark-gray-700 */
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #718096; /* dark-gray-600 */
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-gray-100 flex flex-col min-h-screen">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8 flex-grow">
+        <header class="mb-8 text-center">
+            <h1 class="text-3xl sm:text-4xl font-bold text-sky-400">Simulador Financeiro Interativo</h1>
+            <p class="text-gray-400 mt-2">Analise e projete cenários de vendas e lucratividade.</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+            <!-- Coluna de Inputs -->
+            <div class="space-y-6">
+                <div class="bg-gray-800 p-6 rounded-xl shadow-2xl">
+                    <h2 class="text-2xl font-semibold mb-6 text-sky-300 border-b border-gray-700 pb-3">Parâmetros Base</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label for="metaFaturamentoInput" class="block text-sm font-medium text-gray-300 mb-1">Meta de Faturamento (R$):</label>
+                            <input type="number" id="metaFaturamentoInput" step="any" placeholder="Ex: 795000" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-colors">
+                        </div>
+                        <div>
+                            <label for="precoMedioInput" class="block text-sm font-medium text-gray-300 mb-1">Preço Médio Unitário (R$):</label>
+                            <input type="number" id="precoMedioInput" step="any" placeholder="Ex: 104" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-colors">
+                        </div>
+                        <div>
+                            <label for="margemContribuicaoPercentInput" class="block text-sm font-medium text-gray-300 mb-1">Margem de Contribuição (%):</label>
+                            <input type="number" id="margemContribuicaoPercentInput" step="any" placeholder="Ex: 20" min="0" max="100" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-colors">
+                        </div>
+                        <div>
+                            <label for="custoFixoTotalInput" class="block text-sm font-medium text-gray-300 mb-1">Custos Fixos Totais (R$):</label>
+                            <input type="number" id="custoFixoTotalInput" step="any" placeholder="Ex: 180000" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-colors">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-800 p-6 rounded-xl shadow-2xl">
+                    <h2 class="text-2xl font-semibold mb-6 text-sky-300 border-b border-gray-700 pb-3">Definir Cenário por:</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label for="driverTypeSelect" class="block text-sm font-medium text-gray-300 mb-1">Calcular com base em:</label>
+                            <select id="driverTypeSelect" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-colors">
+                                <option value="quantidade">Quantidade a Vender</option>
+                                <option value="receita">Receita Desejada</option>
+                                <option value="lucro">Lucro Desejado</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="driverValueInput" class="block text-sm font-medium text-gray-300 mb-1">Valor para o Cálculo:</label>
+                            <input type="number" id="driverValueInput" step="any" placeholder="Insira o valor correspondente" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-colors">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coluna de Outputs -->
+            <div class="bg-gray-800 p-6 rounded-xl shadow-2xl">
+                <h2 class="text-2xl font-semibold mb-6 text-sky-300 border-b border-gray-700 pb-3">Resultados do Cenário</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5 text-sm">
+                    <div class="p-3 bg-gray-700 rounded-lg">
+                        <span class="font-medium text-gray-400 block mb-1">Quantidade Vendida:</span>
+                        <span id="outputQuantidade" class="text-lg font-semibold text-sky-400"></span>
+                    </div>
+                    <div class="p-3 bg-gray-700 rounded-lg">
+                        <span class="font-medium text-gray-400 block mb-1">Receita Total:</span>
+                        <span id="outputReceitaTotal" class="text-lg font-semibold text-green-400"></span>
+                    </div>
+                    <div class="p-3 bg-gray-700 rounded-lg">
+                        <span class="font-medium text-gray-400 block mb-1">Lucro / Prejuízo:</span>
+                        <span id="outputLucro" class="text-lg font-semibold"></span> <!-- Cor dinâmica no JS -->
+                    </div>
+                     <div class="p-3 bg-gray-700 rounded-lg">
+                        <span class="font-medium text-gray-400 block mb-1">Margem de Contribuição Unit. (MCU):</span>
+                        <span id="outputMCU" class="text-lg font-semibold text-yellow-400"></span>
+                    </div>
+                    <div class="p-3 bg-gray-700 rounded-lg">
+                        <span class="font-medium text-gray-400 block mb-1">Custo Variável Unitário (CVU):</span>
+                        <span id="outputCVU" class="text-lg font-semibold text-orange-400"></span>
+                    </div>
+                    <div class="p-3 bg-gray-700 rounded-lg">
+                        <span class="font-medium text-gray-400 block mb-1">Margem de Contribuição Total (MCT):</span>
+                        <span id="outputMCT" class="text-lg font-semibold text-yellow-400"></span>
+                    </div>
+                    <div class="p-3 bg-gray-700 rounded-lg">
+                        <span class="font-medium text-gray-400 block mb-1">Custo Variável Total (CVT):</span>
+                        <span id="outputCVT" class="text-lg font-semibold text-orange-400"></span>
+                    </div>
+                    <div class="p-3 bg-gray-700 rounded-lg">
+                        <span class="font-medium text-gray-400 block mb-1">Ponto de Equilíbrio (Quantidade):</span>
+                        <span id="outputPEQtd" class="text-lg font-semibold text-indigo-400"></span>
+                    </div>
+                    <div class="p-3 bg-gray-700 rounded-lg">
+                        <span class="font-medium text-gray-400 block mb-1">Ponto de Equilíbrio (Receita):</span>
+                        <span id="outputPEReceita" class="text-lg font-semibold text-indigo-400"></span>
+                    </div>
+                    <div id="outputDiffMetaContainer" class="p-3 bg-gray-700 rounded-lg sm:col-span-2" style="display: none;">
+                        <span class="font-medium text-gray-400 block mb-1">Diferença para Meta de Faturamento:</span>
+                        <span id="outputDiffMeta" class="text-lg font-semibold"></span> <!-- Cor dinâmica no JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center p-4 text-gray-500 text-sm">
+        Simulador Financeiro &copy; <span id="currentYear"></span>. Todos os direitos reservados.
+    </footer>
+
+    <script>
+        // Helper para formatação de moeda
+        function formatCurrency(value, fallback = 'N/A') {
+            if (typeof value !== 'number' || isNaN(value)) return fallback;
+            return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+        }
+
+        // Helper para formatação de número
+        function formatNumber(value, decimalPlaces = 2, fallback = 'N/A') {
+            if (typeof value !== 'number' || isNaN(value)) return fallback;
+            return value.toFixed(decimalPlaces).replace('.', ','); // Usar vírgula como separador decimal
+        }
+        
+        // Função principal de cálculo e display
+        function calculateAndDisplay() {
+            // --- Obter Inputs Base ---
+            const P_input = parseFloat(document.getElementById('precoMedioInput').value);
+            const MC_perc_input = parseFloat(document.getElementById('margemContribuicaoPercentInput').value);
+            const CFT_input = parseFloat(document.getElementById('custoFixoTotalInput').value);
+            const metaFaturamento_input = parseFloat(document.getElementById('metaFaturamentoInput').value);
+
+            // Usar 0 se NaN, para evitar quebras em cálculos parciais
+            const P = isNaN(P_input) ? 0 : P_input;
+            const MC_perc = isNaN(MC_perc_input) ? 0 : MC_perc_input;
+            const CFT = isNaN(CFT_input) ? 0 : CFT_input;
+            const metaFaturamento = isNaN(metaFaturamento_input) ? 0 : metaFaturamento_input;
+
+            // --- Obter Inputs do Driver ---
+            const driverType = document.getElementById('driverTypeSelect').value;
+            const driverValue_input = parseFloat(document.getElementById('driverValueInput').value);
+            const driverValue = isNaN(driverValue_input) ? 0 : driverValue_input;
+
+            // --- Variáveis de Cálculo ---
+            let Q = 0, RT = 0, L = -CFT; // Lucro padrão é -CFT se Q=0
+            let MCU = 0, CVU = 0;
+            let statusText = { Q: '', RT: '', L: '' }; // Para mensagens como "N/A"
+
+            // Calcular MCU e CVU
+            if (P > 0) {
+                if (MC_perc >= 0 && MC_perc <= 100) { // MC_perc válida
+                    MCU = P * (MC_perc / 100);
+                    CVU = P - MCU;
+                } else { // MC_perc inválida ou 0
+                    MCU = 0; // Assume MC_perc como 0 se fora do range ou inválida
+                    CVU = P; // Custo variável é o próprio preço se não há margem
+                }
+            } else { // Preço é 0 ou inválido
+                MCU = 0;
+                CVU = 0;
+            }
+            
+            // --- Lógica de Cálculo baseada no Driver ---
+            if (driverType === 'quantidade') {
+                Q = driverValue;
+                if (P > 0) {
+                    RT = P * Q;
+                    L = (MCU * Q) - CFT;
+                } else {
+                    RT = 0; // Receita é 0 se preço é 0
+                    L = -CFT; // Lucro é apenas o custo fixo negativo
+                    statusText.RT = '(Preço é zero)';
+                }
+            } else if (driverType === 'receita') {
+                RT = driverValue;
+                if (P > 0) {
+                    Q = RT / P;
+                    L = (MCU * Q) - CFT; // ou L = (RT * (MC_perc/100)) - CFT se P > 0 e MC_perc válido
+                } else {
+                    Q = 0; statusText.Q = '(Preço é zero)';
+                    L = -CFT; statusText.L = '(Preço é zero)';
+                }
+            } else if (driverType === 'lucro') {
+                L = driverValue;
+                if (MCU > 0) {
+                    Q = (CFT + L) / MCU;
+                    if (P > 0) {
+                        RT = P * Q;
+                    } else {
+                        RT = 0; statusText.RT = '(Preço é zero)';
+                        // Q foi calculado, mas RT não pode ser se P=0
+                    }
+                } else { // MCU não é positiva, não é possível atingir lucro arbitrário (exceto se L <= -CFT)
+                     if (L <= -CFT && MCU === 0) { // Se MCU é 0, Lucro só pode ser -CFT
+                        Q = 0; statusText.Q = '(MCU é zero, Q arbitrário)';
+                        RT = 0; statusText.RT = '(MCU é zero)';
+                     } else if (L > -CFT && MCU === 0) {
+                        Q = Infinity; statusText.Q = '(Impossível com MCU zero)';
+                        RT = Infinity; statusText.RT = '(Impossível com MCU zero)';
+                     } else { // MCU < 0
+                        Q = (CFT + L) / MCU; // Q pode ser negativo ou positivo dependendo de L
+                        if (P > 0) RT = P * Q; else RT = 0;
+                     }
+                }
+            }
+
+            // --- Cálculos Adicionais para Display ---
+            const MCT = (typeof Q === 'number' && isFinite(Q)) ? MCU * Q : 0;
+            const CVT = (typeof Q === 'number' && isFinite(Q)) ? CVU * Q : 0;
+
+            let PE_Qtd_val = NaN;
+            let PE_Receita_val = NaN;
+
+            if (MCU > 0 && CFT >= 0) {
+                PE_Qtd_val = CFT / MCU;
+                if (P > 0) {
+                    PE_Receita_val = P * PE_Qtd_val;
+                }
+            } else if (MC_perc > 0 && CFT >= 0 && P > 0) { // Fallback se MCU foi 0 mas MC_perc era válida
+                const effective_mc_ratio = MC_perc / 100;
+                if (effective_mc_ratio > 0) {
+                     PE_Receita_val = CFT / effective_mc_ratio;
+                     if (P > 0) PE_Qtd_val = PE_Receita_val / P;
+                }
+            }
+
+            // --- Atualizar Outputs ---
+            document.getElementById('outputQuantidade').textContent = formatNumber(Q, 2) + (statusText.Q ? ` ${statusText.Q}` : '');
+            document.getElementById('outputReceitaTotal').textContent = formatCurrency(RT) + (statusText.RT ? ` ${statusText.RT}` : '');
+            
+            const lucroEl = document.getElementById('outputLucro');
+            lucroEl.textContent = formatCurrency(L) + (statusText.L ? ` ${statusText.L}` : '');
+            if (typeof L === 'number' && isFinite(L)) {
+                lucroEl.className = L >= 0 ? 'text-lg font-semibold text-green-400' : 'text-lg font-semibold text-red-400';
+            } else {
+                 lucroEl.className = 'text-lg font-semibold text-gray-400'; // Cor neutra para N/A ou Infinito
+            }
+
+            document.getElementById('outputMCU').textContent = formatCurrency(MCU);
+            document.getElementById('outputCVU').textContent = formatCurrency(CVU);
+            document.getElementById('outputMCT').textContent = formatCurrency(MCT);
+            document.getElementById('outputCVT').textContent = formatCurrency(CVT);
+            
+            document.getElementById('outputPEQtd').textContent = formatNumber(PE_Qtd_val, 2);
+            document.getElementById('outputPEReceita').textContent = formatCurrency(PE_Receita_val);
+
+            const diffMetaContainer = document.getElementById('outputDiffMetaContainer');
+            const diffMetaEl = document.getElementById('outputDiffMeta');
+            if (metaFaturamento > 0 && typeof RT === 'number' && isFinite(RT)) {
+                const diff = metaFaturamento - RT;
+                diffMetaEl.textContent = formatCurrency(diff);
+                if (diff <= 0) { // Atingiu ou superou a meta
+                    diffMetaEl.className = 'text-lg font-semibold text-green-400';
+                } else { // Abaixo da meta
+                    diffMetaEl.className = 'text-lg font-semibold text-red-400';
+                }
+                diffMetaContainer.style.display = 'block';
+            } else {
+                diffMetaContainer.style.display = 'none';
+            }
+        }
+
+        // --- Event Listeners ---
+        const inputsToWatch = [
+            'metaFaturamentoInput', 'precoMedioInput', 
+            'margemContribuicaoPercentInput', 'custoFixoTotalInput',
+            'driverValueInput', 'driverTypeSelect'
+        ];
+
+        inputsToWatch.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.addEventListener('input', calculateAndDisplay);
+                element.addEventListener('change', calculateAndDisplay); // Para select
+            }
+        });
+        
+        // --- Inicialização ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Definir valores iniciais baseados na imagem (ou valores padrão)
+            document.getElementById('metaFaturamentoInput').value = '795000';
+            document.getElementById('precoMedioInput').value = '104';
+            document.getElementById('margemContribuicaoPercentInput').value = '20';
+            document.getElementById('custoFixoTotalInput').value = '180000';
+            document.getElementById('driverTypeSelect').value = 'quantidade'; // Driver inicial
+            document.getElementById('driverValueInput').value = '7644';     // Valor do driver inicial
+
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            calculateAndDisplay(); // Calcular e mostrar os resultados iniciais
+        });
+
+    </script>
+</body>
+</html>
