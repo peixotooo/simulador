@@ -111,14 +111,24 @@
                         <span class="block text-xs text-gray-400 mt-1">Fórmula: Preço Médio (P) × Quantidade (Q)</span>
                     </div>
                     <div class="p-3 bg-gray-700 rounded-lg">
+                        <span class="font-medium text-gray-400 block mb-1">Preço Médio Real:</span>
+                        <span id="outputPrecoMedio" class="text-lg font-semibold text-sky-400"></span>
+                        <span class="block text-xs text-gray-400 mt-1">Fórmula: Receita Total ÷ Quantidade</span>
+                    </div>
+                    <div class="p-3 bg-gray-700 rounded-lg">
                         <span class="font-medium text-gray-400 block mb-1">Lucro / Prejuízo:</span>
                         <span id="outputLucro" class="text-lg font-semibold"></span> <!-- Cor dinâmica no JS -->
                         <span class="block text-xs text-gray-400 mt-1">Fórmula: (MCU × Q) − Custo Fixo Total</span>
                     </div>
-                     <div class="p-3 bg-gray-700 rounded-lg">
+                    <div class="p-3 bg-gray-700 rounded-lg">
                         <span class="font-medium text-gray-400 block mb-1">Margem de Contribuição Unit. (MCU):</span>
                         <span id="outputMCU" class="text-lg font-semibold text-yellow-400"></span>
                         <span class="block text-xs text-gray-400 mt-1">Fórmula: P × (Margem % / 100)</span>
+                    </div>
+                    <div class="p-3 bg-gray-700 rounded-lg">
+                        <span class="font-medium text-gray-400 block mb-1">Margem de Contribuição (%):</span>
+                        <span id="outputMCPercent" class="text-lg font-semibold text-yellow-400"></span>
+                        <span class="block text-xs text-gray-400 mt-1">Fórmula: MCU ÷ Preço Médio × 100</span>
                     </div>
                     <div class="p-3 bg-gray-700 rounded-lg">
                         <span class="font-medium text-gray-400 block mb-1">Custo Variável Unitário (CVU):</span>
@@ -258,6 +268,11 @@
             const MCT = (typeof Q === 'number' && isFinite(Q)) ? MCU * Q : 0;
             const CVT = (typeof Q === 'number' && isFinite(Q)) ? CVU * Q : 0;
 
+            const precoMedioReal_val = (typeof Q === 'number' && isFinite(Q) && Q !== 0)
+                ? RT / Q
+                : NaN;
+            const MC_percent_val = (P > 0) ? (MCU / P) * 100 : NaN;
+
             let PE_Qtd_val = NaN;
             let PE_Receita_val = NaN;
 
@@ -287,9 +302,11 @@
             }
 
             document.getElementById('outputMCU').textContent = formatCurrency(MCU);
+            document.getElementById('outputMCPercent').textContent = formatNumber(MC_percent_val, 2) + '%';
             document.getElementById('outputCVU').textContent = formatCurrency(CVU);
             document.getElementById('outputMCT').textContent = formatCurrency(MCT);
             document.getElementById('outputCVT').textContent = formatCurrency(CVT);
+            document.getElementById('outputPrecoMedio').textContent = formatCurrency(precoMedioReal_val);
             
             document.getElementById('outputPEQtd').textContent = formatNumber(PE_Qtd_val, 2);
             document.getElementById('outputPEReceita').textContent = formatCurrency(PE_Receita_val);
